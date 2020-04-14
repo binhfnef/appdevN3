@@ -31,3 +31,4 @@ void clearscreen(void);
 void gotoXY(int, int);
 void drawbar(int, int);
 Position getscreensize(void);	//This function return a compound data (2 ints)
+int devicestatus (void);
