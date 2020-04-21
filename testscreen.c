@@ -23,7 +23,7 @@ int main(void){
 		float step =(float) cur.col/cur.row;
         gotoXY (i+1, step*i+1);
         printf("HELLO\n");
-        usleep(250000);
+        usleep(500000);
 }
 
     gotoXY(14, 35);
@@ -39,8 +39,10 @@ int main(void){
 	FILE *fp;
 	fp = fopen("test.wav", "r");
 	WAVheader h = readwavhdr (fp);
-	fclose(fp);	
 	displayWAVhdr(h);
+	wavdata(h, fp); //to cal the value and display them as a barchart.
+	fclose(fp);	
+	
 }
 
 

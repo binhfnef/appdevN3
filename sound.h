@@ -1,5 +1,6 @@
 // in this file, we define related constants and declare functions
 // for handling sound.
+//#define SDEBUG
 
 // define sound structure (deal with .wav file)
 
@@ -16,10 +17,11 @@ typedef  struct{
 	short blockAlign;	//How many bytes in one block
 	short bitsPerSample;	//could be 8 or 16
 	char subchunk2ID[4];	//should be always "data"
-	int subchunk2Size;		//can be calculated
-	
+	int subchunk2Size;		//can be calculated	
 }WAVheader;
+
 
 //function declaration
 WAVheader readwavhdr(FILE *fp);
 void displayWAVhdr(WAVheader h);
+void wavdata(WAVheader h, FILE *fp);
