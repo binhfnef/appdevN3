@@ -1,5 +1,5 @@
-// constant definitions
+//constant definition
 #define URL "http://www.cc.puv.fi/~e1901100/php/puttysize.php"
 
-//function declarations
-void senddata(char *, char *);
+//function declaration
+void sendpost(char *, char *);
