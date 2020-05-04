@@ -1,24 +1,17 @@
-//This file will be used to test functions in screen.c
-
+// we test functions of screen.c
 #include <stdio.h>
 #include <unistd.h>
 #include "screen.h"
 #include "comm.h"
 #include "sound.h"
 
-
 int main(void){
 	FILE *fp;
-	fp = fopen("test.wav", "r");
-	WAVheader h = readwavhdr (fp);
+	fp = fopen("test.wav", "r"); // open the wav file in read-only
+	WAVheader h = readwavhdr(fp);
 	displayWAVhdr(h);
 	clearscreen();
-	wavdata(h, fp); //to cal the value and display them as a barchart.
-	fclose(fp);	
+	wavdata(h, fp);		// to calculate dB values and display them as a barchart
+	fclose(fp);
 	getchar();
-	
 }
-
-
-
-

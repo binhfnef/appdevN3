@@ -1,0 +1,19 @@
+// in this file we are going to define a number of function for screen 
+//manipulation. These functions include erase screen, set color attribute
+//Set cursor location, etc.. using VT100 escape sequences.
+
+// Follow this reference: 
+// to paste tp putty: shift_insert ke
+
+#include <stdio.h> //https://soundcloud.com/marzuz/mienmanlaanhduongkia
+#include "screen.h"
+
+//function definition
+void setfgcolor(int fg){
+	printf("%c[1;%dm", ESC,fg);
+}
+
+
+ void resetcolors(void){
+	printf("%c[0m", ESC);
+}

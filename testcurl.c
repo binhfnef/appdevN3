@@ -15,7 +15,7 @@ int main(void){
 	if (curl){
 		if(argc<2)
 			curl_easy_setopt(curl, CURLOPT_URL, URL);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "name=Binh&ID=e1901100 ");
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "name=Binh_Nguyen&ID=e1901100 ");
 		res = curl_easy_perform(curl);
 		if(res != CURLE_OK)
 			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
