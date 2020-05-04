@@ -1,42 +1,34 @@
-// in this file we are going to define a number of functions for screen
-// manipulation. These functions include erase screen, set color attributes,
-// set cursor location, etc.. using VT100 escape sequences.
-// move between files: alt_., alt_,
-// follow this reference: http://www.termsys.demon.co.uk/vtansi.htm
-// to paste to putty: shift_insert key
-#include <stdio.h>
-#include "screen.h"
+// In this file, we have a set of screen manipulation functions
+// These functions can change fore- back-ground colors, clearscreen, restore default setting, etc,..
+//To enable screen manipulations, we need to use VT100 escape sequences.
+//Link: http://www.termsys.demon.co.uk/vtansi.htm
 
-// function definition
-int devicestatus(void){
-	printf("%c[5n", ESC);
-	char status[40];
-	scanf("%s", status);
-	int ret;
-	char dum;
-	sscanf(status, "%c%c%d%c", &dum, &dum, &ret, &dum);
-	return ret;
+#include <stdio.h>	// for printf() function
+#include "screen.h"	// contains constants used in this file
+
+//function definitions
+// a function name is an indentifier in C, an identifier should start with
+// a letter or an underscore, and followed by letters, digiits, underscores
+
+void setbgcolor(int bg){
+	printf("%c[1;%dm", ESC, bg);
+}
+
+void setcolors(int fg, int bg){
+	setfgcolor(fg);
+	setbgcolor(bg);
 }
 
 void setfgcolor(int fg){
 	printf("%c[1;%dm", ESC, fg);
 }
 
-void setbgcolor(int bg){
-	printf("%c[1;%dm", ESC, bg);
-}
-
-void setcolors(int f, int b){
-	setfgcolor(f);
-	setbgcolor(bg(b));
+void clearscreen(void){
+	printf("%c[2J",ESC);
 }
 
 void resetcolors(void){
-	printf("%c[0m", ESC);
-}
-
-void clearscreen(void){
-	printf("%c[2J", ESC);
+	printf("%c[0m",ESC);
 }
 
 void gotoXY(int row, int col){
@@ -46,30 +38,47 @@ void gotoXY(int row, int col){
 void drawbar(int col, int height){
 	int i;
 	for(i=1; i<=height; i++){
-		gotoXY(35-i, col);
-#ifdef UNICODE 		// following codes are in conditional compilation
+		gotoXY(40-i, col);	// draw bar fromm bottom of screen
+
+#ifdef UNICODE
 		printf("%s", BAR);
 #else
-		printf("%c", '#');
+		printf("%c",'|');
 #endif
 	}
 }
-
+void drawrect(int row, int col, int height, int width){
+	int i, j;	//loop control variable
+	for(i=row; i<row+height; i++){
+		for(j=col; j<col+width; j++){
+			gotoXY(i,j);
+#ifdef UNICODE
+			printf("%s", BAR);
+#else
+			printf("%c", '#');
+#endif
+		}
+		printf("\n");
+	}
+}
 Position getscreensize(void){
+	// in this function, we will use terminal query function to query cursor
+	// position, the terminal should return a string back to the program
+	// if a query string "ESC[6n" is issued to the terminal
 	Position p;
-	char ret[100] = "\0";		// make an empty string for query return
-	int r, c;
-	gotoXY(999, 999);			// move cursor to the right-bottom corner
-	printf("%c[6n", ESC);		// send query sequence to the terminal
-	scanf("%s", ret);
+	int r, c;		//for decoding the report string
+	char ret[100] = "\0";		// an empty string to get report
+	gotoXY(999,999);		//force the cursor to the bottom right corner
+	printf("%c[6n", ESC);
+	scanf("%s", ret);		//we get report from the terminal
 #ifdef DEBUG
 	printf("%s\n", ret);
 #endif
 #include <string.h>
-	// the following code will decode the return string from terminal
-	if(strlen(ret)>0){
-		char dum; 		// dummy char to consume the chars in ret string
-		sscanf(ret, "%c%c%d%c%d%c", &dum, &dum, &r, &dum, &c, &dum);
+	// we will decode the returned string
+	if(strlen(ret)>0){		//in this case we got a cursor position report
+		char dum;			//dummy char to consume those symbols
+		sscanf(ret,"%c%c%d%c%d%c", &dum, &dum, &r, &dum, &c, &dum);
 		p.row = r;
 		p.col = c;
 	}
